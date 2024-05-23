@@ -6,6 +6,7 @@ from datetime import datetime
 import os
 
 OPENAI_API_KEY = st.secrets["openai_api_key"]
+
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 def fetch_subreddit_comments(subreddit, since, until, size=1000):
@@ -67,7 +68,6 @@ def analyze_comments_with_gpt4o(file_path):
 def list_comment_files():
     return [file for file in os.listdir() if file.endswith("_comments.txt")]
 
-# Streamlit app
 st.sidebar.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/main/SRS.png", width=100)
 
 st.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/main/SRS.png", width=400)
@@ -108,11 +108,11 @@ if st.button("Fetch and Analyze Comments"):
     
     if comments_text:
         file_path = save_comments_to_file(subreddit, comments_text)
-        with st.spinner("Analyzing comments with GPT-4o..."):
+        with st.spinner("Analyzing comments with 𝙶𝙿𝚃-𝟺𝚘 ..."):
             analysis_result = analyze_comments_with_gpt4o(file_path)
         
-        st.write("Analysis Results")
-        st.markdown(analysis_result)
+        st.info("Analysis Results")
+        st.markdown(analysis_result, unsafe_allow_html=True)
 
         with open(file_path, "rb") as file:
             btn = st.download_button(
