@@ -9,6 +9,9 @@ OPENAI_API_KEY = st.secrets["openai_api_key"]
 
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
+st.set_page_config(layout="wide")
+
+
 def fetch_subreddit_comments(subreddit, since, until, size=1000):
     url = f"https://api.pullpush.io/reddit/submission/search"
     params = {
