@@ -52,7 +52,7 @@ def analyze_comments_with_gpt4o(file_path):
                 "content": [
                     {
                         "type": "text",
-                        "text": f"Analyze the following comments for common themes, popularity, and provide the most liked and disliked comments. Present the response in a Markdown table format with the headers 'Discussion Theme', 'Popularity', 'Most Liked Comment', and 'Most Disliked Comment':\n\n{comments}\n"
+                        "text": f"Analyze the following comments for common themes, popularity, and provide the most liked and disliked comments. Also, determine the overall sentiment of the comments and present it in percentage of positive and negative comments. Present the response in a Markdown table format with the headers 'Discussion Theme', 'Popularity', 'Most Liked Comment', and 'Most Disliked Comment':\n\n{comments}\n"
                     }
                 ]
             }
@@ -110,7 +110,7 @@ if st.button("Fetch and Analyze Comments"):
     
     if comments_text:
         file_path = save_comments_to_file(subreddit, comments_text)
-        with st.spinner("Analyzing comments with GPT-4..."):
+        with st.spinner("Analyzing comments with GPT-4o..."):
             analysis_result = analyze_comments_with_gpt4o(file_path)
         
         st.write("Analysis Results")
