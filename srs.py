@@ -1,14 +1,15 @@
 import streamlit as st
 import requests
-import pandas as pd
 import openai
 import os
 from datetime import datetime
 
+# Load secrets
 OPENAI_API_KEY = st.secrets["openai_api_key"]
-openai.api_key = OPENAI_API_KEY
 
-client = openai.OpenAI()
+# Initialize OpenAI client
+openai.api_key = OPENAI_API_KEY
+client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 def fetch_subreddit_comments(subreddit, since, until, size=1000):
     url = f"https://api.pullpush.io/reddit/submission/search"
@@ -35,7 +36,7 @@ def save_comments_to_file(subreddit, comments):
 def analyze_comments_with_gpt4o(file_path):
     with open(file_path, "r") as file:
         comments = file.read()
-
+    
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=[
@@ -64,13 +65,15 @@ def analyze_comments_with_gpt4o(file_path):
         frequency_penalty=0,
         presence_penalty=0
     )
-    return response.choices[0].message["content"]
+    return response['choices'][0]['message']['content']
 
 def list_comment_files():
     return [file for file in os.listdir() if file.endswith("_comments.txt")]
 
+# Streamlit app
 st.title("Subreddit Comments Analysis")
 
+# Sidebar for historical analysis
 st.sidebar.title("Historical Analysis")
 comment_files = list_comment_files()
 selected_file = st.sidebar.selectbox("Select a comments file to review:", comment_files)
@@ -80,11 +83,13 @@ if selected_file:
         comments = file.read()
     st.sidebar.write(comments)
 
+# User inputs
 subreddit = st.text_input("Subreddit", "rabbitr1")
 start_date = st.date_input("Start Date")
 end_date = st.date_input("End Date")
 
 if st.button("Fetch and Analyze Comments"):
+    # Convert dates to timestamps
     since_timestamp = int(datetime.combine(start_date, datetime.min.time()).timestamp())
     until_timestamp = int(datetime.combine(end_date, datetime.min.time()).timestamp())
     
