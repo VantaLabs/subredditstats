@@ -52,7 +52,7 @@ def analyze_comments_with_gpt4o(file_path):
                 "content": [
                     {
                         "type": "text",
-                        "text": f"Analyze the following comments for common themes, popularity, and provide the most liked and disliked comments:\n\n{comments}\n"
+                        "text": f"Analyze the following comments for common themes, popularity, and provide the most liked and disliked comments. Present the response in a Markdown table format with the headers 'Discussion Theme', 'Popularity', 'Most Liked Comment', and 'Most Disliked Comment':\n\n{comments}\n"
                     }
                 ]
             }
