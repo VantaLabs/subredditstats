@@ -76,32 +76,32 @@ st.sidebar.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/mai
 st.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/main/SRS.png", width=400)
 st.title("Subreddit Comments Analysis")
 
-st.sidebar.title("Historical Analysis")
+#st.sidebar.title("Historical Analysis")
 
 comment_files = list_comment_files()
 num_files = len(comment_files)
-st.sidebar.metric("Number of Historical Files", num_files)
-selected_file = st.sidebar.selectbox("Select a comments file to review:", comment_files)
+#st.sidebar.metric("Number of Historical Files", num_files)
+#selected_file = st.sidebar.selectbox("Select a comments file to review:", comment_files)
 
-if selected_file:
-    with open(selected_file, "r") as file:
-        comments = file.read()
-    st.sidebar.write(comments)
+#if selected_file:
+#    with open(selected_file, "r") as file:
+#        comments = file.read()
+#    st.sidebar.write(comments)
 
-if st.sidebar.checkbox("Show raw data as dataframe"):
-    if selected_file:
-        with open(selected_file, "r") as file:
-            comments = file.readlines()
-        df = pd.DataFrame(comments, columns=["Comments"])
-        st.write("Raw Data")
-        st.dataframe(df)
+#if st.sidebar.checkbox("Show raw data as dataframe"):
+#    if selected_file:
+#        with open(selected_file, "r") as file:
+#            comments = file.readlines()
+#        df = pd.DataFrame(comments, columns=["Comments"])
+#        st.write("Raw Data")
+#        st.dataframe(df)
 
-with st.expander("Analysis Parameters"):
+with st.sidebar.expander("Analysis Parameters"):
     subreddit = st.text_input("Subreddit", "rabbitr1")
     start_date = st.date_input("Start Date")
     end_date = st.date_input("End Date")
 
-if st.button("Fetch and Analyze Comments"):
+if st.sidebar.button("Fetch and Analyze Comments"):
     since_timestamp = int(datetime.combine(start_date, datetime.min.time()).timestamp())
     until_timestamp = int(datetime.combine(end_date, datetime.min.time()).timestamp())
     
