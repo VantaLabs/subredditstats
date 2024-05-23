@@ -65,7 +65,8 @@ def analyze_comments_with_gpt4o(file_path):
         frequency_penalty=0,
         presence_penalty=0
     )
-    return response['choices'][0]['message']['content']
+    #return response['choices'][0]['message']['content']
+    st.write(response)
 
 def list_comment_files():
     return [file for file in os.listdir() if file.endswith("_comments.txt")]
