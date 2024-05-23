@@ -1,11 +1,12 @@
 import streamlit as st
 import requests
-import os
+import pandas as pd
+import plotly.express as px
 import openai
 from datetime import datetime
+import os
 
 OPENAI_API_KEY = st.secrets["openai_api_key"]
-
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
 def fetch_subreddit_comments(subreddit, since, until, size=1000):
@@ -67,16 +68,33 @@ def analyze_comments_with_gpt4o(file_path):
 def list_comment_files():
     return [file for file in os.listdir() if file.endswith("_comments.txt")]
 
+st.sidebar.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/main/SRS.png", width=100)
+
+st.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/main/SRS.png", width=400)
 st.title("Subreddit Comments Analysis")
 
 st.sidebar.title("Historical Analysis")
+
 comment_files = list_comment_files()
+num_files = len(comment_files)
+st.sidebar.metric("Number of Historical Files", num_files)
 selected_file = st.sidebar.selectbox("Select a comments file to review:", comment_files)
 
 if selected_file:
     with open(selected_file, "r") as file:
         comments = file.read()
     st.sidebar.write(comments)
+
+if st.sidebar.checkbox("Show raw data as dataframe"):
+    if selected_file:
+        data = []
+        with open(selected_file, "r") as file:
+            comments = file.readlines()
+            for comment in comments:
+                data.append(comment.strip())
+        df = pd.DataFrame(data, columns=["Comments"])
+        st.write("Raw Data")
+        st.dataframe(df)
 
 subreddit = st.text_input("Subreddit", "rabbitr1")
 start_date = st.date_input("Start Date")
