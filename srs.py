@@ -28,8 +28,9 @@ def save_comments_to_file(subreddit, comments):
     with open(file_name, "w") as file:
         for comment in comments:
             file.write(comment + "\n")
+    st.write(file)
     return file_name
-
+    
 def analyze_comments_with_gpt4o(file_path):
     with open(file_path, "r") as file:
         comments = file.read()
