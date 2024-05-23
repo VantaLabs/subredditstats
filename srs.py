@@ -8,6 +8,8 @@ from datetime import datetime, timedelta
 
 OPENAI_API_KEY = st.secrets["openai_api_key"]
 openai.api_key = OPENAI_API_KEY
+client = OpenAI()
+
 
 def fetch_subreddit_comments(subreddit, since, until, size=1000):
     url = f"https://api.pullpush.io/reddit/submission/search"
