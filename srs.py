@@ -29,7 +29,7 @@ def save_comments_to_file(subreddit, comments):
         for comment in comments:
             file.write(comment + "\n")
     return file_name
-    
+
 def analyze_comments_with_gpt4o(file_path):
     with open(file_path, "r") as file:
         comments = file.read()
@@ -52,7 +52,6 @@ def list_comment_files():
     return [file for file in os.listdir() if file.endswith("_comments.txt")]
 
 st.title("Subreddit Comments Analysis")
-
 st.sidebar.title("Historical Analysis")
 comment_files = list_comment_files()
 selected_file = st.sidebar.selectbox("Select a comments file to review:", comment_files)
@@ -72,8 +71,7 @@ if st.button("Fetch and Analyze Comments"):
     
     with st.spinner("Fetching comments..."):
         comments_data = fetch_subreddit_comments(subreddit, since_timestamp, until_timestamp)
-        st.write(comments_data)
-        comments_text = [comment["body"] for comment in comments_data]
+        comments_text = [comment["selftext"] for comment in comments_data if comment["selftext"]]
     
     if comments_text:
         file_path = save_comments_to_file(subreddit, comments_text)
