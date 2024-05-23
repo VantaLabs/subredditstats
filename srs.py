@@ -1,12 +1,13 @@
 import streamlit as st
 import requests
 import pandas as pd
-import openai
+from openai import OpenAI
 import os
 from datetime import datetime, timedelta
 
 OPENAI_API_KEY = st.secrets["openai_api_key"]
 openai.api_key = OPENAI_API_KEY
+client = OpenAI()
 
 def fetch_subreddit_comments(subreddit, since, until, size=1000):
     url = f"https://api.pullpush.io/reddit/submission/search"
@@ -34,7 +35,8 @@ def analyze_comments_with_gpt4o(file_path):
     with open(file_path, "r") as file:
         comments = file.read()
     
-    response = openai.ChatCompletion.create(
+
+    response = client.chat.completions.create(
         model="gpt-4o",
         messages=[
             {"role": "system", "content": "You are an expert data analyst."},
