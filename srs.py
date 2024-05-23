@@ -73,8 +73,8 @@ def list_comment_files():
 
 st.sidebar.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/main/SRS.png")
 
-st.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/main/SRS.png")
-st.title("Subreddit Comments Analysis")
+#st.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/main/SRS.png")
+st.success("Subreddit Comments Analysis")
 
 #st.sidebar.title("Historical Analysis")
 
