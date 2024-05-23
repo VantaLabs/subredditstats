@@ -2,14 +2,13 @@ import streamlit as st
 import requests
 import pandas as pd
 import openai
-from openai import OpenAI
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 
 OPENAI_API_KEY = st.secrets["openai_api_key"]
 openai.api_key = OPENAI_API_KEY
-client = OpenAI()
 
+client = openai.OpenAI()
 
 def fetch_subreddit_comments(subreddit, since, until, size=1000):
     url = f"https://api.pullpush.io/reddit/submission/search"
@@ -36,53 +35,42 @@ def save_comments_to_file(subreddit, comments):
 def analyze_comments_with_gpt4o(file_path):
     with open(file_path, "r") as file:
         comments = file.read()
+
     response = client.chat.completions.create(
         model="gpt-4o",
         messages=[
-          {
-            "role": "system",
-            "content": [
-              {
-                "type": "text",
-                "text": "You are an expert data analyst."
-              }
-            ]
-          },
-          {
-            "role": "user",
-            "content": [
-              {
-                "type": "text",
-                "text": "Analyze the following comments for common themes, popularity, and provide the most liked and disliked comments:\\n\\n{comments}\n"
-              }
-            ]
-          }
+            {
+                "role": "system",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "You are an expert data analyst."
+                    }
+                ]
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": f"Analyze the following comments for common themes, popularity, and provide the most liked and disliked comments:\n\n{comments}\n"
+                    }
+                ]
+            }
         ],
         temperature=1,
         max_tokens=4095,
         top_p=1,
         frequency_penalty=0,
         presence_penalty=0
-      )
-
-    #response = client.chat.completions.create(
-    #    model="gpt-4o",
-    #    messages=[
-    #        {"role": "system", "content": "You are an expert data analyst."},
-    #        {"role": "user", "content": f"Analyze the following comments for common themes, popularity, and provide the most liked and disliked comments:\n\n{comments}"}
-    #    ],
-    #    temperature=1,
-    #    max_tokens=4095,
-    #    top_p=1,
-    #    frequency_penalty=0,
-    #    presence_penalty=0
-    #)
+    )
     return response.choices[0].message["content"]
 
 def list_comment_files():
     return [file for file in os.listdir() if file.endswith("_comments.txt")]
 
 st.title("Subreddit Comments Analysis")
+
 st.sidebar.title("Historical Analysis")
 comment_files = list_comment_files()
 selected_file = st.sidebar.selectbox("Select a comments file to review:", comment_files)
@@ -113,4 +101,3 @@ if st.button("Fetch and Analyze Comments"):
         st.write(analysis_result)
     else:
         st.write("No comments found for the specified period.")
-
