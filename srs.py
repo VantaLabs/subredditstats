@@ -1,7 +1,6 @@
 import streamlit as st
 import requests
 import pandas as pd
-import plotly.express as px
 import openai
 from datetime import datetime
 import os
@@ -68,6 +67,7 @@ def analyze_comments_with_gpt4o(file_path):
 def list_comment_files():
     return [file for file in os.listdir() if file.endswith("_comments.txt")]
 
+# Streamlit app
 st.sidebar.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/main/SRS.png", width=100)
 
 st.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/main/SRS.png", width=400)
@@ -87,18 +87,16 @@ if selected_file:
 
 if st.sidebar.checkbox("Show raw data as dataframe"):
     if selected_file:
-        data = []
         with open(selected_file, "r") as file:
             comments = file.readlines()
-            for comment in comments:
-                data.append(comment.strip())
-        df = pd.DataFrame(data, columns=["Comments"])
+        df = pd.DataFrame(comments, columns=["Comments"])
         st.write("Raw Data")
         st.dataframe(df)
 
-subreddit = st.text_input("Subreddit", "rabbitr1")
-start_date = st.date_input("Start Date")
-end_date = st.date_input("End Date")
+with st.expander("Analysis Parameters"):
+    subreddit = st.text_input("Subreddit", "rabbitr1")
+    start_date = st.date_input("Start Date")
+    end_date = st.date_input("End Date")
 
 if st.button("Fetch and Analyze Comments"):
     since_timestamp = int(datetime.combine(start_date, datetime.min.time()).timestamp())
@@ -114,6 +112,14 @@ if st.button("Fetch and Analyze Comments"):
             analysis_result = analyze_comments_with_gpt4o(file_path)
         
         st.write("Analysis Results")
-        st.write(analysis_result)
+        st.markdown(analysis_result)
+
+        with open(file_path, "rb") as file:
+            btn = st.download_button(
+                label="Download Comments File",
+                data=file,
+                file_name=file_path,
+                mime="text/plain"
+            )
     else:
         st.write("No comments found for the specified period.")
