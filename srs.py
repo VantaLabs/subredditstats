@@ -112,8 +112,3 @@ if st.button("Fetch and Analyze Comments"):
     else:
         st.write("No comments found for the specified period.")
 
-
-
-from openai import OpenAI
-client = OpenAI()
-
