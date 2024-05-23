@@ -28,7 +28,6 @@ def save_comments_to_file(subreddit, comments):
     with open(file_name, "w") as file:
         for comment in comments:
             file.write(comment + "\n")
-    st.write(file)
     return file_name
     
 def analyze_comments_with_gpt4o(file_path):
@@ -73,6 +72,7 @@ if st.button("Fetch and Analyze Comments"):
     
     with st.spinner("Fetching comments..."):
         comments_data = fetch_subreddit_comments(subreddit, since_timestamp, until_timestamp)
+        st.write(comments_data)
         comments_text = [comment["body"] for comment in comments_data]
     
     if comments_text:
