@@ -71,9 +71,9 @@ def analyze_comments_with_gpt4o(file_path):
 def list_comment_files():
     return [file for file in os.listdir() if file.endswith("_comments.txt")]
 
-st.sidebar.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/main/SRS.png", width=100)
+st.sidebar.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/main/SRS.png")
 
-st.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/main/SRS.png", width=400)
+st.image("https://raw.githubusercontent.com/VantaLabs/subredditstats/main/SRS.png")
 st.title("Subreddit Comments Analysis")
 
 #st.sidebar.title("Historical Analysis")
